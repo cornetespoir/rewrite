@@ -41,23 +41,23 @@ function HomeWrapper() {
     setLastState
   }
 
-  // const scrollToTop = () => {
-  //   window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-  // }
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+  }
 
-  // useEffect(() => {
-  //   window.addEventListener('scroll', () => {
-  //     if (window.scrollY > 100) {
-  //       setShowScrollTop(true)
-  //     }
-  //     else {
-  //       setShowScrollTop(false)
-  //     }
-  //     return
-  //   })
-  // }, [])
+  useEffect(() => {
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 100) {
+        setShowScrollTop(true)
+      }
+      else {
+        setShowScrollTop(false)
+      }
+      return
+    })
+  }, [])
   
-  // const [showScrollTop, setShowScrollTop] = useState(false)
+  const [showScrollTop, setShowScrollTop] = useState(false)
   
 
   return (
@@ -65,9 +65,9 @@ function HomeWrapper() {
       <div>
       <Header />
       {/* <Search /> */}
-      {/* <PostsWrapper /> */}
+      <PostsWrapper />
       <NoSSRMenu />
-      {/* {showScrollTop && (
+      {showScrollTop && (
         <button className='back-to-top' onClick={scrollToTop}>
           <span className='sr-text'>Scroll back to the top of the page</span>
           <svg 
@@ -77,7 +77,7 @@ function HomeWrapper() {
             strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-arrow-up">
               <line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/>
           </svg>
-        </button>)} */}
+        </button>)}
       </div>
     </SearchContext.Provider>
   )
