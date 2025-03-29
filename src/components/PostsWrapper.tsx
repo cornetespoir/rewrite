@@ -15,7 +15,7 @@ const PostsWrapper = ({ }: PostsProps) => {
         postData,
         loading,
         setTimestamp,
-        timestamp, 
+        timestamp,
         previousTimestamp,
         setLastState,
         lastState,
@@ -24,6 +24,7 @@ const PostsWrapper = ({ }: PostsProps) => {
     const router = useRouter();
     const pathname = usePathname()
     const searchParams = useSearchParams()
+
     if (postData == null) return
 
     function onNavigate() {
@@ -33,7 +34,7 @@ const PostsWrapper = ({ }: PostsProps) => {
             router.push(pathname + '?' + params)
             setPreviousTimestamp(timestamp)
             setTimestamp(postData[postData.length - 1].timestamp.toString())
-            setLastState({tag: lastState.tag, timestamp: postData[postData.length - 1].timestamp.toString()})
+            setLastState({ tag: lastState.tag, timestamp: postData[postData.length - 1].timestamp.toString() })
         }
     }
 
@@ -44,7 +45,10 @@ const PostsWrapper = ({ }: PostsProps) => {
             setTimestamp(previousTimestamp)
         }
     }
+    const params = new URLSearchParams(searchParams);
 
+    const isFirstPage = params.get('before') == null || params.get('before') === ''
+    const isSearchPage = params.get('tag') !== '' && params.get('tag') != null
 
     return (
         <section>
@@ -53,8 +57,8 @@ const PostsWrapper = ({ }: PostsProps) => {
             )}
             {!loading && postData.length > 0 && postData.map((data) => {
                 return (
-                    <article 
-                        key={data.id} 
+                    <article
+                        key={data.id}
                         id={`post-${data.id}`}
                         className={`post-type-${data.type}`}
                     >
@@ -64,22 +68,29 @@ const PostsWrapper = ({ }: PostsProps) => {
                         </div>
                         <Info data={data} />
                     </article>
-                    )
-                }
+                )
+            }
             )}
-            {!loading && postData.length < 0 && <article style={{ textAlign: 'center' }}>There are no posts detected using this tag</article>}
+            {!loading && !postData.length && isSearchPage && (
+                <div className='last-session'>
+                    <h3>No Results Found</h3>
+                    <p>There are no posts detected using this tag</p>
+                </div>
+            )}
             {!loading && postData.length > 0 && postData.length === 20 && (
                 <footer>
-                <button
-                    onClick={onPrevious}>
-                    Previous Page
-                </button>
-                <button
-                    onClick={onNavigate}>
-                    Next Page
-                </button>
+                    {!isFirstPage && (
+                        <button
+                            onClick={onPrevious}>
+                            Previous Page
+                        </button>
+                    )}
+                    <button
+                        onClick={onNavigate}>
+                        Next Page
+                    </button>
                 </footer>
-               
+
             )}
         </section>
     )
