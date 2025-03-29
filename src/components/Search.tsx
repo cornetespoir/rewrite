@@ -132,6 +132,15 @@ const Search = () => {
     setTimestamp(`${newDate}`)
   }
 
+  const onResume = () => {
+      const params = new URLSearchParams(searchParams);
+      params.set('tag', `${lastState.tag}`);
+      params.set('before', `${lastState.timestamp}`);
+      router.push(pathname + '?' + params)
+      setTag(lastState.tag)
+      setTimestamp(lastState.timestamp)
+  }
+
   const isSearchPage = params.get('tag') != null && params.get('tag') != ''
   useFventListener('keyup', onSearch, searchRef)
   const NoSSRResumeSession = dynamic<ResumeProps>(() => import("@/components/search-settings").then(module => module.ResumeSession), {
@@ -161,9 +170,9 @@ const Search = () => {
             <line x1="21" y1="21" x2="16.65" y2="16.65" />
           </svg>
         </div>
-        {/* {!isSearchPage && (
-            <NoSSRResumeSession router={router} />
-        )} */}
+        {!isSearchPage && (
+            <NoSSRResumeSession onResume={onResume} lastState={lastState} />
+        )}
         {isSearchPage && (
           <>
             <div className='date-picker'>
