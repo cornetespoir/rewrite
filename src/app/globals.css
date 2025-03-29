@@ -892,8 +892,20 @@ aside {
   left: 2vh;
   z-index: 3;
   top: 12vh;
-  background:rgba(0,0,0,.18);
+  background:rgba(0,0,0,.28);
+  backdrop-filter: blur(20px);
   transition: left 0.3s cubic-bezier(0, 0.6, 0, 1);
+}
+
+@media screen and (max-width: 900px) {
+  aside {
+    max-width: calc( 100% - 4rem);
+    position: relative;
+  }
+  aside.close {
+    left: 1rem;
+  }
+
 }
 
 @media (prefers-color-scheme: dark) {
