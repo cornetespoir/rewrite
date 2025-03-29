@@ -13,6 +13,9 @@
 /.next/
 /out/
 
+# api keys
+.env
+
 # production
 /build
 
