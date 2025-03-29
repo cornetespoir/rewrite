@@ -293,6 +293,7 @@ article p {
 
 .last-session button {
   z-index:1;
+  color: white;
 }
 
 .last-session button:hover:before, footer button:hover:before{
@@ -856,11 +857,5 @@ aside {
 
   aside.close {
       left: 1rem
-  }
-}
-
-@media (prefers-color-scheme:dark) {
-  html {
-      color-scheme: dark
   }
 }
