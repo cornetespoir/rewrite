@@ -1,7 +1,7 @@
 "use client"
 
-import { ReactNode, useContext, useState } from "react"
-
+import { useState } from "react"
+import { Suspense } from 'react'
 import { Header, Search } from "@/components";
 import { SearchContext } from "@/app/SearchContext"
 import { PostsWrapper } from "@/components/PostsWrapper";
@@ -34,12 +34,14 @@ export default function Home() {
   }
   return (
     <>
-      <SearchContext.Provider value={initialValues}>
-        <Header />
-        <Search />
-        <PostsWrapper />
-        <Menu stateChanger={setPostData} setLoading={setLoading} />
-      </SearchContext.Provider>
+      <Suspense>
+        <SearchContext.Provider value={initialValues}>
+          <Header />
+          <Search />
+          <PostsWrapper />
+          <Menu stateChanger={setPostData} setLoading={setLoading} />
+        </SearchContext.Provider>
+      </Suspense>
     </>
   )
 }
