@@ -130,14 +130,14 @@ const Search = () => {
     setTimestamp(`${newDate}`)
   }
 
-  // const onResume = () => {
-  //     const params = new URLSearchParams(searchParams);
-  //     params.set('tag', `${lastState.tag}`);
-  //     params.set('before', `${lastState.timestamp}`);
-  //     router.push(pathname + '?' + params)
-  //     setTag(lastState.tag)
-  //     setTimestamp(lastState.timestamp)
-  // }
+  const onResume = () => {
+      const params = new URLSearchParams(searchParams);
+      params.set('tag', `${lastState.tag}`);
+      params.set('before', `${lastState.timestamp}`);
+      router.push(pathname + '?' + params)
+      setTag(lastState.tag)
+      setTimestamp(lastState.timestamp)
+  }
 
   const isSearchPage = params.get('tag') != null && params.get('tag') != ''
   useFventListener('keyup', onSearch, searchRef)
@@ -165,7 +165,7 @@ const Search = () => {
           </svg>
         </div>
         {!isSearchPage && (
-            <ResumeSession onResume={() => {}} lastState={lastState} />
+            <ResumeSession onResume={onResume} lastState={lastState} />
         )}
         {isSearchPage && (
           <>
