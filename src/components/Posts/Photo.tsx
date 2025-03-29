@@ -12,7 +12,7 @@ const Photo = ({ content, photos }: PhotoProps): ReactElement => {
     return (
         <>
             {photos?.map((photo, index) => (
-                <img key={index} src={photo['original_size']['url']} />
+                <img key={index} src={photo['original_size']['url']} alt='' />
             ))}
             <Text body={content} />
         </>

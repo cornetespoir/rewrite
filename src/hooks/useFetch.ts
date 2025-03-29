@@ -48,7 +48,7 @@ const useFetch = <T>(url: string, tag?: string): State<T> => {
       }
     };
     fetchData();
-  }, [url]);
+  }, [url, tag]);
 
   return { ...state };
 };

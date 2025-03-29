@@ -19,11 +19,11 @@ const PostsWrapper = ({ }: PostsProps) => {
         previousTimestamp,
         setPreviousTimestamp
     } = useContext(SearchContext)
-    if (postData == null) return
     console.log(postData)
     const router = useRouter();
     const pathname = usePathname()
     const searchParams = useSearchParams()
+    if (postData == null) return
 
     function onNavigate() {
         if (postData?.[postData.length - 1].timestamp != null) {
