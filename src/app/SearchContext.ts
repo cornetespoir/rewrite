@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, createContext } from 'react'
-import { PostData } from './types'
+import { LastState, PostData } from './types'
 
 
  interface PostDataContextType  {
@@ -14,8 +14,11 @@ import { PostData } from './types'
     tag?: string | null,
     setTag: Dispatch<SetStateAction<string>>
     filters: any,
-    setFilters: Dispatch<SetStateAction<any>>
-
+    setFilters: Dispatch<SetStateAction<any>>,
+    removeLink: boolean,
+    setRemoveLink: Dispatch<SetStateAction<boolean>>,
+    lastState: LastState,
+    setLastState: Dispatch<SetStateAction<LastState>>
   }
   
    export const SearchContext =  createContext<PostDataContextType>({
@@ -30,5 +33,9 @@ import { PostData } from './types'
     tag: '',
     setTag: () => {},
     filters: [],
-    setFilters: () => []
+    setFilters: () => [],
+    removeLink: false,
+    setRemoveLink: () => {},
+    setLastState: () => {},
+    lastState: {tag: '', timestamp: ''}
    })

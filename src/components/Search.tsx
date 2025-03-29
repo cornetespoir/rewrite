@@ -4,7 +4,9 @@ import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 import { SearchContext } from "@/app/SearchContext";
 import { PostResults } from "@/app/types";
-
+import dynamic from 'next/dynamic'
+import { ResumeProps } from "./search-settings/ResumeSession";
+import { LoadingIndicator } from "./LoadingIndicator";
 const THE_KEY = process.env.NEXT_PUBLIC_REACT_APP_TUMBLR_API_KEY;
 
 const Search = () => {
@@ -18,6 +20,9 @@ const Search = () => {
     setTag,
     setTimestamp,
     timestamp,
+    removeLink,
+    setLastState, 
+    lastState,
     setPreviousTimestamp
   } = useContext(SearchContext)
   const pathname = usePathname();
@@ -38,6 +43,7 @@ const Search = () => {
     const value = (e.target as HTMLInputElement).value
     if (value == null || value === tag) return
     setTag(value)
+    setLastState({tag: value ?? lastState.tag, timestamp: ''})
     params.delete('before');
     if (value) {
       params.set('tag', value);
@@ -65,7 +71,6 @@ const Search = () => {
 
 
   const { filters } = useContext(SearchContext)
-  const removeLink = false
 
   const updateArticles = () => {
     if (filters)
@@ -123,11 +128,17 @@ const Search = () => {
     params.set('before', `${newDate}`);
     router.push(pathname + '?' + params)
     setOverrideTimestamp(true)
+    setLastState({tag: lastState.tag, timestamp: newDate.toString()})
     setTimestamp(`${newDate}`)
   }
 
   const isSearchPage = params.get('tag') != null && params.get('tag') != ''
   useFventListener('keyup', onSearch, searchRef)
+  const NoSSRResumeSession = dynamic<ResumeProps>(() => import("@/components/search-settings").then(module => module.ResumeSession), {
+     ssr: false, 
+     suspense: true, 
+     loading: () =>  <LoadingIndicator/>
+     });
 
   return (
     <>
@@ -150,17 +161,22 @@ const Search = () => {
             <line x1="21" y1="21" x2="16.65" y2="16.65" />
           </svg>
         </div>
+        {!isSearchPage && (
+            <NoSSRResumeSession router={router} />
+        )}
         {isSearchPage && (
-          <div className='date-picker'>
-            <label htmlFor="start">Search for Posts Before:</label>
-            <input
-              type="date"
-              id="start"
-              min='2007-01-01'
-              name="start"
-              onChange={datePicker}
-            />
-          </div>
+          <>
+            <div className='date-picker'>
+              <label htmlFor="start">Search for Posts Before:</label>
+              <input
+                type="date"
+                id="start"
+                min='2007-01-01'
+                name="start"
+                onChange={datePicker}
+              />
+            </div>
+          </>
         )}
         {data?.response && !loading && data.response.length > 0 && (
           <article className='result'>
