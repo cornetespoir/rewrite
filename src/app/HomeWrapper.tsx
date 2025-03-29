@@ -65,7 +65,7 @@ function HomeWrapper() {
       <div>
       <Header />
       <Search />
-      <PostsWrapper />
+      {/* <PostsWrapper /> */}
       <NoSSRMenu />
       {/* {showScrollTop && (
         <button className='back-to-top' onClick={scrollToTop}>
