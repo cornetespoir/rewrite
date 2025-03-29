@@ -161,9 +161,9 @@ const Search = () => {
             <line x1="21" y1="21" x2="16.65" y2="16.65" />
           </svg>
         </div>
-        {!isSearchPage && (
+        {/* {!isSearchPage && (
             <NoSSRResumeSession router={router} />
-        )}
+        )} */}
         {isSearchPage && (
           <>
             <div className='date-picker'>
