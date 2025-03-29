@@ -1,7 +1,7 @@
 "use client"
 
 import { ReactNode, useContext, useState } from "react"
-
+export const dynamic = 'force-dynamic'
 import { Header, Search } from "@/components";
 import { SearchContext } from "@/app/SearchContext"
 import { PostsWrapper } from "@/components/PostsWrapper";
