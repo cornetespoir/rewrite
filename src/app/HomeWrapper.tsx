@@ -64,7 +64,7 @@ function HomeWrapper() {
     <SearchContext.Provider value={initialValues}>
       <div>
       <Header />
-      {/* <Search /> */}
+      <Search />
       <PostsWrapper />
       <NoSSRMenu />
       {showScrollTop && (
