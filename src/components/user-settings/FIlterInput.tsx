@@ -1,7 +1,13 @@
+'use client'
 import { SearchContext } from "@/app/SearchContext";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import React, { useContext } from "react";
 import { useState, useEffect } from "react";
+import { Filters } from "./Filters";
+
+import dynamic from 'next/dynamic'
+
+const NoSSRFIlters = dynamic<{}>(() => import("./Filters").then(module => module.Filters), { ssr: false, suspense: true });
 
 const FilterInput = () => {
 	const {filters, setFilters} = useContext(SearchContext)
@@ -9,23 +15,18 @@ const FilterInput = () => {
 	const [error, setError] = useState(false);
 	const [duplicates, setDuplicates] = useState(false);
 	const [removeLink, setRemoveLink] = useLocalStorage('removeLink')
+	const [updatedFilter, setUpdatedFilters] = useState(filters ?? [])
 
 	const handleSubmit = (e: { preventDefault: () => void; }) => {
 		e.preventDefault();
 		if (!filterItem) return;
-		const isDuplicate = filters?.some((filter: { filter: string; }) => filter.filter === filterItem);
+		const isDuplicate = filters.some((filter: { filter: string; }) => filter.filter === filterItem);
 		if (isDuplicate) {
 			setDuplicates(true);
 			return;
 		}
-		if (filters != null) {
-			setFilters([{ id: Date.now().toString(36), filter: filterItem }, ...filters])
 
-		}
-		else (
-			setFilters([{ id: Date.now().toString(36), filter: filterItem }])
-
-		)
+		setFilters([{ id: Date.now().toString(36), filter: filterItem }, ...filters]);
 		setfilterItem('');
 		setDuplicates(false);
 	}
@@ -34,9 +35,13 @@ const FilterInput = () => {
 		if (typeof window !== 'undefined') {
 			localStorage.setItem('filters', JSON.stringify(filters))
 		}
+		setUpdatedFilters(filters)
 	}, [filters])
 
-	const deletefilter = (id: string) => setFilters(filters.filter((filter: { id: string; }) => filter.id !== id));
+	useEffect(() => {
+		setUpdatedFilters(filters)
+	}, [])
+
 	const handleToggle = () => setRemoveLink((prev: boolean) => !prev);
 
 	useEffect(() => {
@@ -75,32 +80,16 @@ const FilterInput = () => {
 				)
 				: ''}
 			<div className="filter-container flex">
-				{filters?.map((filterItem: { id: string; filter: string; }) => {
-					const { id, filter } = filterItem;
-					return (
-						<div key={id} className="filter-card">
-							{filter}
-							<button style={{cursor: "pointer"}}
-								onClick={() => deletefilter(id)}>
-									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-trash-2">
-										<polyline points="3 6 5 6 21 6"/>
-										<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-										<line x1="10" y1="11" x2="10" y2="17"/>
-										<line x1="14" y1="11" x2="14" y2="17"/>
-									</svg>
-									<span className="sr-text">delete</span></button>
-						</div>
-					);
-				})}
+				<NoSSRFIlters />
 			</div>
 			<button className={`toggleNote remove-${removeLink}`} onClick={handleToggle}> 
 				{removeLink ? 
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-check-square">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="feather feather-check-square">
 						<polyline points="9 11 12 14 22 4"/>
 						<path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
 					</svg>
 				:
-				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-square">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="feather feather-square">
 					<rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
 				</svg>
 				}

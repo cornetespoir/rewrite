@@ -65,7 +65,7 @@ const Search = () => {
 
 
   const { filters } = useContext(SearchContext)
-  const removeLink = localStorage.getItem('removeLinks') == 'true' ? true : false
+  const removeLink = false
 
   const updateArticles = () => {
     if (filters)

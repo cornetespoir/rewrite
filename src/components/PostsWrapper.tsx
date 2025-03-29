@@ -19,7 +19,6 @@ const PostsWrapper = ({ }: PostsProps) => {
         previousTimestamp,
         setPreviousTimestamp
     } = useContext(SearchContext)
-    console.log(postData)
     const router = useRouter();
     const pathname = usePathname()
     const searchParams = useSearchParams()
