@@ -17,6 +17,8 @@ const PostsWrapper = ({ }: PostsProps) => {
         setTimestamp,
         timestamp, 
         previousTimestamp,
+        setLastState,
+        lastState,
         setPreviousTimestamp
     } = useContext(SearchContext)
     const router = useRouter();
@@ -31,6 +33,7 @@ const PostsWrapper = ({ }: PostsProps) => {
             router.push(pathname + '?' + params)
             setPreviousTimestamp(timestamp)
             setTimestamp(postData[postData.length - 1].timestamp.toString())
+            setLastState({tag: lastState.tag, timestamp: postData[postData.length - 1].timestamp.toString()})
         }
     }
 

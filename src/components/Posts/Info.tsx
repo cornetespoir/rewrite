@@ -47,6 +47,7 @@ const Info = ({ data }: InfoProps) => {
     function switchTags(tagName: string) {
         const params = new URLSearchParams(searchParams);
         params.set('tag', tagName);
+        params.delete('before')
         router.push(pathname + '?' + params)
         setTag(tagName)
     }

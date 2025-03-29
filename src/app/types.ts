@@ -2,6 +2,11 @@ export type PostResults = {
     response: []
 }
 
+export type LastState = {
+    timestamp:string
+    tag:string
+}
+
 export interface UserData {
     name?: string
     title?: string

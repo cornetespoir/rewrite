@@ -13,7 +13,7 @@ const Header = ({ }: HeaderProps): ReactElement | null => {
         <>
                 <nav>
                     <div className='nav-container'>
-                        <h2>Findtags</h2>
+                        <h2>Findtags<sup style={{fontSize: '.92rem', color: 'salmon'}}> (alpha testing)</sup></h2>
                         <div className='nav-links'>
                             <a href='/'>Home</a>
                             <a href='/pages/about'>About</a>
