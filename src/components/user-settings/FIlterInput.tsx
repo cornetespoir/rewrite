@@ -10,23 +10,29 @@ import dynamic from 'next/dynamic'
 const NoSSRFIlters = dynamic<{}>(() => import("./Filters").then(module => module.Filters), { ssr: false, suspense: true });
 
 const FilterInput = () => {
-	const {filters, setFilters} = useContext(SearchContext)
+	const { filters, setFilters } = useContext(SearchContext)
 	const [filterItem, setfilterItem] = useState('');
 	const [error, setError] = useState(false);
 	const [duplicates, setDuplicates] = useState(false);
 	const [removeLink, setRemoveLink] = useLocalStorage('removeLink')
-	const [updatedFilter, setUpdatedFilters] = useState(filters ?? [])
 
 	const handleSubmit = (e: { preventDefault: () => void; }) => {
 		e.preventDefault();
 		if (!filterItem) return;
-		const isDuplicate = filters.some((filter: { filter: string; }) => filter.filter === filterItem);
-		if (isDuplicate) {
-			setDuplicates(true);
-			return;
-		}
 
-		setFilters([{ id: Date.now().toString(36), filter: filterItem }, ...filters]);
+		if (filters != null) {
+			const isDuplicate = filters?.some((filter: { filter: string; }) => filter.filter === filterItem);
+			if (isDuplicate) {
+				setDuplicates(true);
+				return;
+			}
+			setFilters([{ id: Date.now().toString(36), filter: filterItem }, ...filters]);
+
+		}
+		else {
+			setFilters([{ id: Date.now().toString(36), filter: filterItem }]);
+
+		}
 		setfilterItem('');
 		setDuplicates(false);
 	}
@@ -35,12 +41,7 @@ const FilterInput = () => {
 		if (typeof window !== 'undefined') {
 			localStorage.setItem('filters', JSON.stringify(filters))
 		}
-		setUpdatedFilters(filters)
 	}, [filters])
-
-	useEffect(() => {
-		setUpdatedFilters(filters)
-	}, [])
 
 	const handleToggle = () => setRemoveLink((prev: boolean) => !prev);
 
@@ -82,16 +83,16 @@ const FilterInput = () => {
 			<div className="filter-container flex">
 				<NoSSRFIlters />
 			</div>
-			<button className={`toggleNote remove-${removeLink}`} onClick={handleToggle}> 
-				{removeLink ? 
+			<button className={`toggleNote remove-${removeLink}`} onClick={handleToggle}>
+				{removeLink ?
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="feather feather-check-square">
-						<polyline points="9 11 12 14 22 4"/>
-						<path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+						<polyline points="9 11 12 14 22 4" />
+						<path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
 					</svg>
-				:
-				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="feather feather-square">
-					<rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-				</svg>
+					:
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="feather feather-square">
+						<rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+					</svg>
 				}
 				Hide filtered post links</button>
 		</div>
