@@ -4,7 +4,7 @@ import { SearchContext } from "@/app/SearchContext"
 import { PostsWrapper } from "@/components/PostsWrapper";
 import { useSearchParams } from "next/navigation";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import dynamic from 'next/dynamic'
 import { useFventListener } from "@/hooks";
@@ -45,17 +45,20 @@ function HomeWrapper() {
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
   }
 
+  useEffect(() => {
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 100) {
+        setShowScrollTop(true)
+      }
+      else {
+        setShowScrollTop(false)
+      }
+      return
+    })
+  }, [])
+  
   const [showScrollTop, setShowScrollTop] = useState(false)
-  useFventListener('scroll', () => {
-    if (window.scrollY > 100) {
-      setShowScrollTop(true)
-    }
-    else {
-      setShowScrollTop(false)
-    }
-    return
-  })
-
+  
 
   return (
     <SearchContext.Provider value={initialValues}>
