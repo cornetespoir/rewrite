@@ -16,7 +16,7 @@ const ResumeSession = ({ lastState, onResume }: ResumeProps) => {
             <div className='last-session'>
                 <h3>Continue where you left off?</h3>
                 <p>Your last detected search was for posts tagged <span>{lastState.tag}</span> {day}</p>
-                <button onClick={onResume}>Resume your last search</button>
+                {/* <button onClick={onResume}>Resume your last search</button> */}
             </div>
 
         </div>
