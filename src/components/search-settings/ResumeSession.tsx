@@ -7,8 +7,10 @@ export interface ResumeProps {
     onResume: any
 }
 const ResumeSession = ({ lastState, onResume }: ResumeProps) => {
-    console.log('last state', lastState)
+    if (lastState == null) {return null}
     if (lastState.tag === '' || lastState.tag == null) { return null }
+    console.log('last state', lastState)
+
     // const date = new Date((parseInt(lastState.timestamp ?? 0)) * 1000)
     // console.log(date)
     // const day = date.toString() === 'Invalid Date' ? '' : 'before ' + date.toLocaleDateString('en-US', { day: 'numeric', weekday: 'short', year: 'numeric', month: 'short' })
