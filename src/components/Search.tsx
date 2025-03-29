@@ -4,9 +4,7 @@ import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 import { SearchContext } from "@/app/SearchContext";
 import { PostResults } from "@/app/types";
-import dynamic from 'next/dynamic'
-import { ResumeProps } from "./search-settings/ResumeSession";
-import { LoadingIndicator } from "./LoadingIndicator";
+import { ResumeSession } from "./search-settings/ResumeSession";
 const THE_KEY = process.env.NEXT_PUBLIC_REACT_APP_TUMBLR_API_KEY;
 
 const Search = () => {
@@ -143,11 +141,7 @@ const Search = () => {
 
   const isSearchPage = params.get('tag') != null && params.get('tag') != ''
   useFventListener('keyup', onSearch, searchRef)
-  const NoSSRResumeSession = dynamic<ResumeProps>(() => import("@/components/search-settings").then(module => module.ResumeSession), {
-     ssr: false, 
-     suspense: true, 
-     loading: () =>  <LoadingIndicator/>
-     });
+
 
   return (
     <>
@@ -171,7 +165,7 @@ const Search = () => {
           </svg>
         </div>
         {!isSearchPage && (
-            <NoSSRResumeSession onResume={onResume} lastState={lastState} />
+            <ResumeSession onResume={onResume} lastState={lastState} />
         )}
         {isSearchPage && (
           <>

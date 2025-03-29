@@ -1,15 +1,15 @@
 "use client"
-import { Header, Search } from "@/components";
+import { Header } from "@/components";
 import { SearchContext } from "@/app/SearchContext"
 import { PostsWrapper } from "@/components/PostsWrapper";
 import { useSearchParams } from "next/navigation";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useEffect, useState } from "react";
-
 import dynamic from 'next/dynamic'
-import { useFventListener } from "@/hooks";
+import { LoadingIndicator } from "@/components/LoadingIndicator";
 
-const NoSSRMenu = dynamic<{}>(() => import("@/components/user-settings").then(module => module.Menu), { ssr: false, suspense: true });
+const NoSSRMenu = dynamic<{}>(() => import("@/components/user-settings").then(module => module.Menu), { ssr: false });
+const NoSSRSearch = dynamic<{}>(() => import("@/components").then(module => module.Search), { ssr: false, suspense: true, loading: () => <LoadingIndicator /> });
 
 function HomeWrapper() {
   const searchParams = useSearchParams()
@@ -64,7 +64,7 @@ function HomeWrapper() {
     <SearchContext.Provider value={initialValues}>
       <div>
       <Header />
-      <Search />
+      <NoSSRSearch />
       <PostsWrapper />
       <NoSSRMenu />
       {showScrollTop && (
