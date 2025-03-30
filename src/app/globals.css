@@ -209,7 +209,11 @@ article:first-of-type {
 }
 
 .options {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
   width: 100%;
+  text-align: left;
 }
 
 #heading {
@@ -287,6 +291,7 @@ article p {
   padding: 4px 8px;
   display: inline-block;
   cursor: pointer;
+  color: white;
   font-size: 1rem;
   border-radius: var(--border-radius)
 }
@@ -446,7 +451,66 @@ p:empty() {
   justify-content: space-between
 }
 
-.filter-card button:not(.favorites) {
+.favorites {
+  width: 50%;
+  gap: 2rem;
+  display: flex;
+  margin: var(--spacing-sm) auto;
+  flex-wrap: wrap;
+}
+
+.favorites h3 {
+  width: 100%;
+  margin-bottom: var(--spacing);
+}
+
+.favorite {
+  gap: 1rem;
+  display: flex;
+  align-items: center;
+  border: var(--border);
+  border-radius: var(--border-radius);
+  background: linear-gradient(rgb(28, 27, 27), rgb(28, 27, 27)) padding-box,
+  linear-gradient(to top right,  rgba(255, 255, 255, 0.2), rgba(100, 148, 237, 0.47), rgba(100, 148, 237, 0.508)) border-box;
+}
+
+.favorite:hover {
+  background: linear-gradient(rgb(28, 27, 27), rgb(28, 27, 27)) padding-box,
+  linear-gradient(to bottom right, cornflowerblue, salmon) border-box;
+}
+
+
+.favorite-list {
+  display: flex;
+  width: 100%;
+  gap: 1rem;
+}
+
+.favorite button:not(.delete) {
+  color: white;
+  font-size:1rem;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  padding: var(--spacing);
+}
+
+.favorite .delete {
+  background: transparent;
+  border: 0;
+  margin-right: var(--spacing-sm);
+  height: 2.4rem;
+  width: 2.4rem;
+  padding: var(--spacing-sm);
+
+}
+
+.filter-card .delete {
+  margin-left: var(--spacing-sm);
+}
+
+.delete {
+  cursor: pointer;
   color: rgb(var(--error));
   font-weight: 700;
   border-radius: 50%;
@@ -460,7 +524,7 @@ p:empty() {
   width: 2rem;
 }
 
-.filter-card button:not(.favorites):hover {
+.delete:hover {
   background: rgba(167,39,39,.4);
 }
 
@@ -646,6 +710,7 @@ aside.open .exit i:before {
   padding: var(--spacing-sm)!important;
   font-size: 16px;
   border: 0!important;
+  color: white;
   text-align: left
 }
 
@@ -770,7 +835,7 @@ figure:hover>* {
 }
 
 :is(.hidden,.hidden-word) .tags {
-  padding: var(--spacing-lg)
+  padding: var(--spacing-lg);
 }
 
 .hidden-word:before {
@@ -812,8 +877,10 @@ aside {
   left: 2vh;
   z-index: 3;
   top: 12vh;
+  border: var(--border);
   background: rgba(0,0,0,.28);
   backdrop-filter: blur(20px);
+  border-radius: var(--border-radius);
   transition: left .3s cubic-bezier(0,.6,0,1)
 }
 
@@ -821,7 +888,7 @@ aside {
   background: linear-gradient(rgb(28, 27, 27), rgb(28, 27, 27)) padding-box,
   linear-gradient(to bottom right, cornflowerblue, salmon) border-box;
   padding: var(--spacing);
-  width: 700px;
+  width: 50%;
   border: 2px solid transparent;
   text-align: left;
   margin: var(--spacing-lg) auto;
