@@ -5,6 +5,7 @@ import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 import { SearchContext } from "@/app/SearchContext";
 import { PostResults } from "@/app/types";
 import { ResumeSession } from "./search-settings/ResumeSession";
+import { FavoriteSearches } from "./search-settings";
 const THE_KEY = process.env.NEXT_PUBLIC_REACT_APP_TUMBLR_API_KEY;
 
 const Search = () => {
@@ -21,6 +22,8 @@ const Search = () => {
     removeLink,
     setLastState, 
     lastState,
+    favorites,
+    setFavorites,
     setPreviousTimestamp
   } = useContext(SearchContext)
   const pathname = usePathname();
@@ -142,6 +145,27 @@ const Search = () => {
   const isSearchPage = params.get('tag') != null && params.get('tag') != ''
   useFventListener('keyup', onSearch, searchRef)
 
+  const saveToFavorites = () => {
+   if (tag == null) return
+   if (favorites == null) {
+    setFavorites([tag])
+   }
+   else {
+    const isDuplicate = favorites?.some((favorite) => favorite === tag);
+    if (isDuplicate) {
+      return
+    }
+    setFavorites([...favorites, tag])
+   }
+  }
+
+const searchFavorite = (favorite: string) => {
+  const params = new URLSearchParams(searchParams);
+  params.set('tag', `${favorite}`);
+  params.delete('before');
+  router.push(pathname + '?' + params)
+  setTag(favorite); // This sets the "tag" to the selected favorite
+};
 
   return (
     <>
@@ -163,9 +187,17 @@ const Search = () => {
             <circle cx="11" cy="11" r="8" />
             <line x1="21" y1="21" x2="16.65" y2="16.65" />
           </svg>
+          {isSearchPage && (
+            <>
+              <button onClick={saveToFavorites}>Save</button>
+            </>
+          )}
         </div>
         {!isSearchPage && (
+          <>
             <ResumeSession onResume={onResume} lastState={lastState} />
+            <FavoriteSearches searchFavorite={searchFavorite}/>
+          </>
         )}
         {isSearchPage && (
           <>
