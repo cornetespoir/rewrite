@@ -20,7 +20,7 @@ const Search = () => {
     setTimestamp,
     timestamp,
     removeLink,
-    setLastState, 
+    setLastState,
     lastState,
     favorites,
     setFavorites,
@@ -34,7 +34,11 @@ const Search = () => {
     data,
     loading: isLoading
   } = useFetch<PostResults>(`https://api.tumblr.com/v2/tagged?api_key=${THE_KEY}&tag=${tag}&before=${timestamp}`, tag ?? '')
+  const isSearchPage = params.get('tag') != null && params.get('tag') != ''
 
+  /**
+   * handles searching for tags
+   */
   function onSearch(e: any): void {
     if (!overrideTimestamp) {
       setPreviousTimestamp('')
@@ -44,7 +48,7 @@ const Search = () => {
     const value = (e.target as HTMLInputElement).value
     if (value == null || value === tag) return
     setTag(value)
-    setLastState({tag: value ?? lastState.tag, timestamp: ''})
+    setLastState({ tag: value ?? lastState.tag, timestamp: '' })
     params.delete('before');
     if (value) {
       params.set('tag', value);
@@ -58,18 +62,16 @@ const Search = () => {
     if (data?.response != null)
       setPostData(data.response)
   }
-
+  useFventListener('keyup', onSearch, searchRef)
 
   useEffect(() => {
     if (data?.response != null)
       setPostData(data.response)
   }, [data])
 
-
   useEffect(() => {
     setLoading(isLoading)
   }, [isLoading])
-
 
   const { filters } = useContext(SearchContext)
 
@@ -118,54 +120,52 @@ const Search = () => {
   useEffect(() => {
     updateArticles()
   })
+
   const router = useRouter()
   const datePicker = (e: { target: any; }) => {
     let date = e.target.value
     date = date.split('-')
     const newDate = new Date(date[1] + "-" + date[2] + "-" + date[0]).getTime() / 1000
-
     setPreviousTimestamp(timestamp)
-    const params = new URLSearchParams(searchParams);
     params.set('before', `${newDate}`);
     router.push(pathname + '?' + params)
     setOverrideTimestamp(true)
-    setLastState({tag: lastState.tag, timestamp: newDate.toString()})
+    setLastState({ tag: lastState.tag, timestamp: newDate.toString() })
     setTimestamp(`${newDate}`)
   }
 
   const onResume = () => {
-      const params = new URLSearchParams(searchParams);
-      params.set('tag', `${lastState.tag}`);
-      params.set('before', `${lastState.timestamp}`);
-      router.push(pathname + '?' + params)
-      setTag(lastState.tag)
-      setTimestamp(lastState.timestamp)
+    params.set('tag', `${lastState.tag}`);
+    params.set('before', `${lastState.timestamp}`);
+    router.push(pathname + '?' + params)
+    setTag(lastState.tag)
+    setTimestamp(lastState.timestamp)
   }
-
-  const isSearchPage = params.get('tag') != null && params.get('tag') != ''
-  useFventListener('keyup', onSearch, searchRef)
+  const isFavorited = favorites?.some((favorite: string | null) => favorite === params.get('tag'))
 
   const saveToFavorites = () => {
-   if (tag == null) return
-   if (favorites == null) {
-    setFavorites([tag])
-   }
-   else {
-    const isDuplicate = favorites?.some((favorite) => favorite === tag);
-    if (isDuplicate) {
-      return
+    if (tag == null) return
+    if (isFavorited) {
+      setFavorites(favorites.filter((favorite) => favorite != tag))
     }
-    setFavorites([...favorites, tag])
-   }
+    if (favorites == null) {
+      setFavorites([tag])
+    }
+    else {
+      const isDuplicate = favorites?.some((favorite) => favorite === tag);
+      if (isDuplicate) {
+        return
+      }
+      setFavorites([...favorites, tag])
+    }
+  }
+  const searchFavorite = (favorite: string) => {
+    params.set('tag', `${favorite}`)
+    params.delete('before')
+    router.push(pathname + '?' + params)
+    setTag(favorite)
   }
 
-const searchFavorite = (favorite: string) => {
-  const params = new URLSearchParams(searchParams);
-  params.set('tag', `${favorite}`);
-  params.delete('before');
-  router.push(pathname + '?' + params)
-  setTag(favorite); // This sets the "tag" to the selected favorite
-};
 
   return (
     <>
@@ -189,14 +189,20 @@ const searchFavorite = (favorite: string) => {
           </svg>
           {isSearchPage && (
             <>
-              <button onClick={saveToFavorites}>Save</button>
+              <button onClick={saveToFavorites} className='save'>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24" height="24" viewBox="0 0 24 24" fill={isFavorited ? 'salmon' : 'none'} stroke={isFavorited ? 'salmon': 'white'}
+                  strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-heart"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" /></svg>
+                <span className='hover-text'>{isFavorited ? `${tag} is already one of your favorite searches` : `Save ${tag} to your favorite searches`}</span>
+              </button>
             </>
           )}
         </div>
         {!isSearchPage && (
           <>
             <ResumeSession onResume={onResume} lastState={lastState} />
-            <FavoriteSearches searchFavorite={searchFavorite}/>
+            <FavoriteSearches searchFavorite={searchFavorite} />
           </>
         )}
         {isSearchPage && (

@@ -10,10 +10,10 @@ const FavoriteSearches = ({ searchFavorite }: FavoritesProps) => {
     const { favorites, setFavorites } = useContext(SearchContext)
 
     if (favorites == null || favorites.length < 1) return null
+    
     const handleFavorite = (favorite: string) => {
         searchFavorite(favorite)
     }
-
     const deleteFavorite = (id: string) => setFavorites(favorites.filter((favorite) => favorite != id));
 
     return (
