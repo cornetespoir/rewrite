@@ -16,8 +16,9 @@ function HomeWrapper() {
   // default states
   const [postData, setPostData] = useState<[]>([])
   const [loading, setLoading] = useState(false)
-  const [filters, setFilters] = useLocalStorage('filters');
-  const [lastState, setLastState] = useLocalStorage('lastState');
+  const [filters, setFilters] = useLocalStorage('filters')
+  const [favorites, setFavorites] = useLocalStorage('favorites')
+  const [lastState, setLastState] = useLocalStorage('lastState')
   const [timestamp, setTimestamp] = useState(searchParams.get('before')?.toString() ?? '')
   const [previousTimestamp, setPreviousTimestamp] = useState(timestamp)
   const [removeLink, setRemoveLink] = useLocalStorage('removeLink')
@@ -38,7 +39,9 @@ function HomeWrapper() {
     removeLink,
     setRemoveLink,
     lastState,
-    setLastState
+    setLastState,
+    favorites,
+    setFavorites
   }
 
   const scrollToTop = () => {

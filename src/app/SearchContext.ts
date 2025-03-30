@@ -19,6 +19,8 @@ import { LastState, PostData } from './types'
     setRemoveLink: Dispatch<SetStateAction<boolean>>,
     lastState: LastState,
     setLastState: Dispatch<SetStateAction<LastState>>
+    favorites: string[],
+    setFavorites: Dispatch<SetStateAction<string[]>>
   }
   
    export const SearchContext =  createContext<PostDataContextType>({
@@ -34,6 +36,8 @@ import { LastState, PostData } from './types'
     setTag: () => {},
     filters: [],
     setFilters: () => [],
+    favorites: [],
+    setFavorites: () => [],
     removeLink: false,
     setRemoveLink: () => {},
     setLastState: () => {},
