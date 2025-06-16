@@ -1,58 +1,49 @@
 "use client"
-import { useContext, useState } from "react"
-import { SearchContext } from "@/app/SearchContext"
 import { Post } from "./Posts/Post"
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { Info } from "./Posts/Info"
 import { User } from "./Posts/User"
 import { LoadingIndicator } from "./LoadingIndicator"
+import { useUpdateArticles } from "@/hooks"
+import { useSearchDataContext } from "@/app/SearchDataContext"
+import { usePagination } from "@/hooks/usePagination"
 
-interface PostsProps {
-
-}
-const PostsWrapper = ({ }: PostsProps) => {
+const PostsWrapper = () => {
     const {
+        isFirstPage,
+        isSearchPage,
         postData,
+        pages,
+        currentPage,
         loading,
-        setTimestamp,
-        timestamp,
-        previousTimestamp,
-        setLastState,
-        lastState,
-        setPreviousTimestamp
-    } = useContext(SearchContext)
+    } = useSearchDataContext()
     const router = useRouter();
     const pathname = usePathname()
     const searchParams = useSearchParams()
+    const params = new URLSearchParams(searchParams);
+
+    const { next, previous } = usePagination()
+    useUpdateArticles()
 
     if (postData == null) return
 
     function onNavigate() {
-        if (postData?.[postData.length - 1].timestamp != null) {
-            const params = new URLSearchParams(searchParams);
-            params.set('before', `${postData?.[postData.length - 1].timestamp}`);
-            router.push(pathname + '?' + params)
-            setPreviousTimestamp(timestamp)
-            setTimestamp(postData[postData.length - 1].timestamp.toString())
-            setLastState({tag: lastState.tag, timestamp: postData[postData.length - 1].timestamp.toString()})
-        }
+        params.set('before', `${postData?.[postData.length - 1].timestamp}`);
+        router.push(pathname + '?' + params)
+        next()
     }
 
     function onPrevious() {
-        if (postData?.[postData.length - 1].timestamp != null) {
-            window.history.back()
-            setPreviousTimestamp(timestamp)
-            setTimestamp(previousTimestamp)
+        if (currentPage > 0) {
+        params.set('before', `${pages?.[currentPage - 1].timestamp}`);
+        router.push(pathname + '?' + params)
+        previous()
         }
     }
-    const params = new URLSearchParams(searchParams);
-
-    const isFirstPage = params.get('before') == null || params.get('before') === ''
-    const isSearchPage = params.get('tag') !== '' && params.get('tag') != null
 
     return (
         <section>
-            {loading && (
+            {loading && isSearchPage && (
                 <LoadingIndicator />
             )}
             {!loading && postData.length > 0 && postData.map((data) => {
