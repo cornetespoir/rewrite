@@ -901,15 +901,6 @@ p.error-message {
   border-bottom-left-radius: 0;
 }
 
-:is(.hidden-word, .hidden) .post-info a[href^='https://']:not([href*='findtags-react']):after
-{
-  content: " \f35d";
-  font-family: "Font Awesome 5 Free";
-  font-weight: 900;
-  font-size: 0.8rem;
-  margin-left: 0.4rem;
-}
-
 figure {
   position: relative;
 }
@@ -1008,7 +999,8 @@ figure:hover > * {
 }
 
 .hidden .blocked-tag {
-  color: #b56262;
+  color: #cf6e6e;
+  background: transparent;
 }
 
 .hidden .reblog-link,
