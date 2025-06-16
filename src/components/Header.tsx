@@ -1,19 +1,13 @@
 "use client"
-import { ReactElement, useContext, useState } from "react"
-import { useSearchParams } from 'next/navigation'
+import { ReactElement } from "react"
 
 
-interface HeaderProps {
-}
-const Header = ({ }: HeaderProps): ReactElement | null => {
-    const searchParams = useSearchParams()
-    const params = new URLSearchParams(searchParams);
-    const isSearchPage = params.get('tag') !== '' && params.get('tag') != null
+const Header = (): ReactElement | null => {
     return (
         <>
                 <nav>
                     <div className='nav-container'>
-                        <h2>Findtags<sup style={{fontSize: '.92rem', color: 'salmon'}}> (alpha testing)</sup></h2>
+                        <h2>Findtags</h2>
                         <div className='nav-links'>
                             <a href='/'>Home</a>
                             <a href='/pages/about'>About</a>

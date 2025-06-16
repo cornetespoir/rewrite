@@ -6,16 +6,12 @@ interface VideoProps {
     player?: []
 }
 
-
-
 const Video = ({ content, player }: VideoProps): ReactElement | null => {
     if (player == null) return null
     if (player.length < 3) return null
 
     return (
-        <>
-            <Text body={content} />
-        </>
+        <Text body={content} />
     )
 }
 

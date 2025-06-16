@@ -1,11 +1,11 @@
 'use client'
-import { SearchContext } from "@/app/SearchContext";
-import React, { useContext } from "react";
+import React from "react";
 import { useState, useEffect } from "react";
 import { Filters } from "./Filters";
+import { useSearchDataContext } from "@/app/SearchDataContext";
 
 const FilterInput = () => {
-	const { filters, setFilters, removeLink, setRemoveLink } = useContext(SearchContext)
+	const { filters, setFilters, removeLink, setRemoveLink } = useSearchDataContext()
 	const [filterItem, setfilterItem] = useState('');
 	const [error, setError] = useState(false);
 	const [duplicates, setDuplicates] = useState(false);
@@ -57,8 +57,10 @@ const FilterInput = () => {
 			<h2>Filter content</h2>
 			<p>Add words that you want hidden from your searches.
 				<small><a target="_blank" rel="noreferrer" title="Read the filtering content guide" href="https://github.com/cornetespoir/findtags-react/wiki/Filtering-Content"> <i className="fa-regular fa-circle-question"></i><span className="sr-text">Learn more about this feature</span></a></small></p>
-			<form onSubmit={handleSubmit}>
+			<form className='submit-filter' onSubmit={handleSubmit}>
+				<label className='sr-text' htmlFor='filters'>Add a word that you want to be removed from your searches</label>
 				<input
+					id='filters'
 					type="text"
 					value={filterItem}
 					className={duplicates ? 'error-message' : ''}

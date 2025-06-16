@@ -1,11 +1,14 @@
-import { SearchContext } from '@/app/SearchContext'
+import { useSearchDataContext } from '@/app/SearchDataContext'
 import { PostData } from '@/app/types'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { useContext } from 'react'
 
 interface InfoProps {
     data: PostData
 }
+
+/**
+ * Post Info
+ */
 const Info = ({ data }: InfoProps) => {
     const {
         post_url: postUrl,
@@ -18,7 +21,7 @@ const Info = ({ data }: InfoProps) => {
 
     const {
         setTag,
-    } = useContext(SearchContext)
+    } =  useSearchDataContext()
 
     function reblogUrl(url: string): string {
         let path = ''
