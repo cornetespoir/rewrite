@@ -1,10 +1,9 @@
 'use client'
 
-import { SearchContext } from "@/app/SearchContext"
-import { useContext } from "react"
+import { useSearchDataContext } from "@/app/SearchDataContext";
 
 const Filters = () => {
-    const { filters, setFilters } = useContext(SearchContext)
+    const { filters, setFilters } = useSearchDataContext()
     const deletefilter = (id: string) => setFilters(filters.filter((filter: { id: string; }) => filter.id !== id));
 
     return (

@@ -1,13 +1,12 @@
 "use client"
 
-import { SearchContext } from "@/app/SearchContext"
-import { useContext } from "react"
+import { useSearchDataContext } from "@/app/SearchDataContext"
 
 interface FavoritesProps {
     searchFavorite: (favorite: string) => void
 }
 const FavoriteSearches = ({ searchFavorite }: FavoritesProps) => {
-    const { favorites, setFavorites } = useContext(SearchContext)
+    const { favorites, setFavorites } = useSearchDataContext()
 
     if (favorites == null || favorites.length < 1) return null
     
